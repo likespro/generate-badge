@@ -23,7 +23,7 @@ jobs:
           function format_size { echo $(numfmt --to iec --suffix B $1); }
           function format_number { LC_ALL=en_US.UTF-8 printf "%'d\n" $1; }
           echo "file_count=$(format_number $(git ls-files | wc -l))" >> $GITHUB_OUTPUT
-          echo "lines_of_code=$(git ls-files | grep '\action.yml$' | xargs wc -l)" >> $GITHUB_OUTPUT
+          echo "lines_of_code=$(find . -type f -name "*" -exec wc -l {} + | awk '{s+=$1} END {print s}')" >> $GITHUB_OUTPUT
           git gc
           echo "size=$(format_size $(($(git count-objects -v | grep 'size-pack: ' | sed 's/size-pack: //g' | tr -d '\n') * 1024)))" >> $GITHUB_OUTPUT
         shell: bash
